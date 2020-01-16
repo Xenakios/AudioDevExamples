@@ -1,8 +1,6 @@
 #include "JuceHeader.h"
 
 //This is an example on running a very simple audio callback in the console
-//To use it, you can just create a ConsoleToot object on the stack
-//And attach your own AudioIODeviceCallback.
 
 class MyCallback : public AudioIODeviceCallback
 {
