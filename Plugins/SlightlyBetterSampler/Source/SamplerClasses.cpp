@@ -43,6 +43,8 @@ void MySamplerVoice::renderNextBlock(AudioBuffer<float>& outputBuffer, int start
 {
 	if (currentSamplerSound == nullptr)
 		return;
+	if (currentSamplerSound->length == 0)
+		return;
 	auto& data = currentSamplerSound->buffer;
 	const float* const inL = data.getReadPointer(0);
 	const float* const inR = data.getNumChannels() > 1 ? data.getReadPointer(1) : nullptr;

@@ -5,11 +5,13 @@
 class MySamplerSound : public SynthesiserSound
 {
 public:
+	MySamplerSound() {}
 	MySamplerSound(File f, int rootnote_, Range<int> noteRange_) : midiRootNote(rootnote_), noteRange(noteRange_)
 	{
 		setFile(f, rootnote_);
 	}
 	void setFile(File f, int rootNote);
+	void setNoteRange(Range<int> r) { noteRange = r; }
 	void setLooping(bool b) { looping = b; }
 	bool isLooping() const { return looping; }
 	friend class MySamplerVoice;
