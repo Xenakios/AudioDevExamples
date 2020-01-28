@@ -97,7 +97,7 @@ void MySamplerVoice::renderNextBlock(AudioBuffer<float>& outputBuffer, int start
 
 }
 
-void MySamplerSound::setFile(File f, int rootNote)
+void MySamplerSound::setFile(File f, int rootNote_)
 {
 	AudioFormatManager man;
 	man.registerBasicFormats();
@@ -111,6 +111,7 @@ void MySamplerSound::setFile(File f, int rootNote)
 			ScopedLock locker(cs);
 			sampleRate = reader->sampleRate;
 			length = reader->lengthInSamples;
+			midiRootNote = rootNote_;
 			std::swap(temp, buffer);
 		}
 		delete reader;
