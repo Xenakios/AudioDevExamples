@@ -19,7 +19,16 @@ void MySamplerVoice::startNote(int midiNoteNumber, float velocity, SynthesiserSo
 
 void MySamplerVoice::stopNote(float velocity, bool allowTailOff)
 {
-	envelope.noteOff();
+	if (allowTailOff)
+	{
+		envelope.noteOff();
+	}
+	else
+	{
+		clearCurrentNote();
+		envelope.reset();
+		currentSamplerSound = nullptr;
+	}
 }
 
 void MySamplerVoice::pitchWheelMoved(int newPitchWheelValue)
@@ -40,7 +49,7 @@ void MySamplerVoice::renderNextBlock(AudioBuffer<float>& outputBuffer, int start
 
 	float* outL = outputBuffer.getWritePointer(0, startSample);
 	float* outR = outputBuffer.getNumChannels() > 1 ? outputBuffer.getWritePointer(1, startSample) : nullptr;
-
+	bool isLooping = currentSamplerSound->looping;
 	while (--numSamples >= 0)
 	{
 		auto pos = (int)sourcePosition;
@@ -74,17 +83,43 @@ void MySamplerVoice::renderNextBlock(AudioBuffer<float>& outputBuffer, int start
 
 		if (sourcePosition > currentSamplerSound->length)
 		{
-			sourcePosition = 0.0;
-			//stopNote(0.0f, false);
-			//break;
+			if (isLooping)
+			{
+				sourcePosition = 0.0;
+			}
+			else
+			{
+				stopNote(0.0f, false);
+				break;
+			}
 		}
 	}
 
 }
 
+void MySamplerSound::setFile(File f, int rootNote)
+{
+	AudioFormatManager man;
+	man.registerBasicFormats();
+	auto reader = man.createReaderFor(f);
+	if (reader)
+	{
+		AudioBuffer<float> temp;
+		temp.setSize(reader->numChannels, reader->lengthInSamples);
+		reader->read(&temp, 0, reader->lengthInSamples, 0, true, true);
+		{
+			ScopedLock locker(cs);
+			sampleRate = reader->sampleRate;
+			length = reader->lengthInSamples;
+			std::swap(temp, buffer);
+		}
+		delete reader;
+	}
+}
+
 bool MySamplerSound::appliesToNote(int midiNoteNumber)
 {
-	return true;
+	return noteRange.contains(midiNoteNumber);
 }
 
 bool MySamplerSound::appliesToChannel(int midiChannel)

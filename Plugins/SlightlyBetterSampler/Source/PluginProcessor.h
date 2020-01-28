@@ -47,6 +47,7 @@ public:
     void setStateInformation (const void* data, int sizeInBytes) override;
 
 	String importFile(File f);
+	void setSampleLooping(bool b);
 private:
 	Synthesiser synth;
 	MySamplerSound* samplerSound = nullptr;

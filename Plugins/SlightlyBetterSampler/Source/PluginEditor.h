@@ -21,5 +21,6 @@ public:
 private:
     SlightlyBetterSamplerAudioProcessor& processor;
 	TextButton importButton;
+	ToggleButton loopButton;
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (SlightlyBetterSamplerAudioProcessorEditor)
 };

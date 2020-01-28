@@ -15,7 +15,8 @@ SlightlyBetterSamplerAudioProcessor::SlightlyBetterSamplerAudioProcessor()
                        )
 #endif
 {
-	samplerSound = new MySamplerSound(File("C:\\MusicAudio\\sourcesamples\\_70699__beskhu__sanzanais-72-c4-minibz-b.aif"), 60);
+	samplerSound = 
+		new MySamplerSound(File("C:\\MusicAudio\\sourcesamples\\_70699__beskhu__sanzanais-72-c4-minibz-b.aif"), 60, { 48, 73 });
 	synth.addSound(samplerSound);
 	for (int i = 0; i < 16; ++i)
 		synth.addVoice(new MySamplerVoice());
@@ -166,6 +167,11 @@ String SlightlyBetterSamplerAudioProcessor::importFile(File f)
 {
 	samplerSound->setFile(f, 60);
 	return String();
+}
+
+void SlightlyBetterSamplerAudioProcessor::setSampleLooping(bool b)
+{
+	samplerSound->setLooping(b);
 }
 
 //==============================================================================

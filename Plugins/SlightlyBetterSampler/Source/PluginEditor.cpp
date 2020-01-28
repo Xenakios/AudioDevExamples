@@ -21,6 +21,12 @@ SlightlyBetterSamplerAudioProcessorEditor::SlightlyBetterSamplerAudioProcessorEd
 			
 		}
 	};
+	addAndMakeVisible(loopButton);
+	loopButton.setButtonText("Loop");
+	loopButton.onClick = [this]() 
+	{
+		processor.setSampleLooping(loopButton.getToggleState());
+	};
     setSize (400, 300);
 }
 
@@ -37,4 +43,5 @@ void SlightlyBetterSamplerAudioProcessorEditor::paint (Graphics& g)
 void SlightlyBetterSamplerAudioProcessorEditor::resized()
 {
 	importButton.setBounds(1, 1, 100, 20);
+	loopButton.setBounds(importButton.getRight() + 1, 1, 100, 20);
 }
